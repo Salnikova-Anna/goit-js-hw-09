@@ -15,6 +15,13 @@ let selectedDate = null;
 
 makeBtnInactive(refs.startBtn);
 
+Notiflix.Notify.init({
+  width: '280px',
+  position: 'center-top',
+  distance: '10px',
+  opacity: 1,
+});
+
 const options = {
   enableTime: true,
   time_24hr: true,
