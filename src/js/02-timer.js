@@ -9,11 +9,36 @@ const refs = {
   hours: document.querySelector('span[data-hours]'),
   minutes: document.querySelector('span[data-minutes]'),
   seconds: document.querySelector('span[data-seconds]'),
+  datetimePicker: document.querySelector('#datetime-picker'),
 };
 
 let selectedDate = null;
 
 makeBtnInactive(refs.startBtn);
+
+refs.startBtn.addEventListener('click', onStartBtnClick);
+
+function onStartBtnClick() {
+  refs.datetimePicker.setAttribute('disabled', 'true');
+
+  makeBtnInactive(refs.startBtn);
+
+  const timerId = setInterval(() => {
+    let ms = selectedDate - Date.now();
+    let remainedTimeOdject = convertMs(ms);
+
+    refs.days.textContent = addLeadingZero(remainedTimeOdject.days);
+    refs.hours.textContent = addLeadingZero(remainedTimeOdject.hours);
+    refs.minutes.textContent = addLeadingZero(remainedTimeOdject.minutes);
+    refs.seconds.textContent = addLeadingZero(remainedTimeOdject.seconds);
+
+    if (ms < 1000) {
+      clearInterval(timerId);
+      makeBtnActive(refs.startBtn);
+      refs.datetimePicker.removeAttribute('disabled');
+    }
+  }, 1000);
+}
 
 Notiflix.Notify.init({
   width: '280px',
@@ -40,26 +65,6 @@ const options = {
 };
 
 const fp = flatpickr('#datetime-picker', options);
-
-refs.startBtn.addEventListener('click', onStartBtnClick);
-
-function onStartBtnClick() {
-  makeBtnInactive(refs.startBtn);
-
-  const timerId = setInterval(() => {
-    let ms = selectedDate - Date.now();
-    let remainedTimeOdject = convertMs(ms);
-
-    refs.days.textContent = addLeadingZero(remainedTimeOdject.days);
-    refs.hours.textContent = addLeadingZero(remainedTimeOdject.hours);
-    refs.minutes.textContent = addLeadingZero(remainedTimeOdject.minutes);
-    refs.seconds.textContent = addLeadingZero(remainedTimeOdject.seconds);
-
-    if (ms < 1000) {
-      clearInterval(timerId);
-    }
-  }, 1000);
-}
 
 function makeBtnInactive(btn) {
   btn.setAttribute('disabled', 'true');

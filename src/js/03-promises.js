@@ -33,6 +33,8 @@ function onFormSubmit(event) {
       });
     delay += step;
   }
+
+  event.target.reset();
 }
 
 function createPromise(position, delay) {
